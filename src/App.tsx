@@ -164,7 +164,7 @@ const PrizeRevealCard = ({ onComplete }: { onComplete: () => void }) => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="absolute inset-0 bg-white z-40 overflow-hidden flex flex-col items-center justify-center p-8 text-center"
+      className="absolute inset-0 bg-white z-40 overflow-hidden flex flex-col items-center p-8 text-center"
     >
       {/* Full Area Confetti */}
       <div className="absolute inset-0 pointer-events-none opacity-30">
@@ -172,7 +172,7 @@ const PrizeRevealCard = ({ onComplete }: { onComplete: () => void }) => {
           <motion.div
             key={i}
             animate={{ 
-              y: [0, 600], 
+              y: [0, 800], 
               rotate: [0, 360],
               x: [0, (i % 2 === 0 ? 100 : -100)]
             }}
@@ -192,7 +192,7 @@ const PrizeRevealCard = ({ onComplete }: { onComplete: () => void }) => {
         ))}
       </div>
 
-      <div className="relative z-10 max-w-xs w-full">
+      <div className="flex-1 flex flex-col items-center justify-center relative z-10 max-w-xs w-full">
         <motion.p 
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -230,7 +230,7 @@ const PrizeRevealCard = ({ onComplete }: { onComplete: () => void }) => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-3xl font-black leading-tight mb-4"
+          className="text-xl font-bold leading-tight mb-3"
         >
           Your Rider Won a<br />
           <span className="text-[#00CCBC]">Free Drink Token!</span>
@@ -240,18 +240,20 @@ const PrizeRevealCard = ({ onComplete }: { onComplete: () => void }) => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-gray-500 text-base mb-10"
+          className="text-gray-500 text-base"
         >
           The prize has been automatically sent to their account.
         </motion.p>
+      </div>
 
+      <div className="relative z-10 w-full max-w-xs pb-4">
         <motion.button
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6 }}
           whileTap={{ scale: 0.95 }}
           onClick={onComplete}
-          className="w-full py-5 bg-[#00CCBC] text-white rounded-2xl font-black text-lg shadow-xl shadow-[#00CCBC]/20 hover:bg-[#00B8A9] transition-colors"
+          className="w-full py-3.5 bg-[#00CCBC] text-white rounded-xl font-bold text-base shadow-lg shadow-[#00CCBC]/20 hover:bg-[#00B8A9] transition-colors"
         >
           Complete Order
         </motion.button>
@@ -502,40 +504,46 @@ export default function App() {
       </div>
 
       {/* Bottom Delivery Info */}
-      <motion.div 
-        initial={{ y: 100 }}
-        animate={{ y: 0 }}
-        className="bg-white p-4 pb-6 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] rounded-t-2xl z-30"
-      >
-        <h2 className="text-xl font-black mb-3">Delivery</h2>
-        
-        <div className="flex items-center justify-between p-3 border border-gray-100 rounded-xl">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-              <Bike className="text-gray-400" size={20} />
+      <AnimatePresence>
+        {!isDelivered && (
+          <motion.div 
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="bg-white p-4 pb-6 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] rounded-t-2xl z-30"
+          >
+            <h2 className="text-xl font-black mb-3">Delivery</h2>
+            
+            <div className="flex items-center justify-between p-3 border border-gray-100 rounded-xl">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                  <Bike className="text-gray-400" size={20} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-base leading-tight">{rider.name}</h4>
+                  <p className="text-gray-500 text-xs">{rider.vehicle}</p>
+                </div>
+              </div>
+              
+              <div className="flex gap-2">
+                <motion.button 
+                  whileTap={{ scale: 0.9 }}
+                  className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-[#00CCBC] hover:bg-gray-50"
+                >
+                  <Phone size={18} />
+                </motion.button>
+                <motion.button 
+                  whileTap={{ scale: 0.9 }}
+                  className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-[#00CCBC] hover:bg-gray-50"
+                >
+                  <MessageSquare size={18} />
+                </motion.button>
+              </div>
             </div>
-            <div>
-              <h4 className="font-bold text-base leading-tight">{rider.name}</h4>
-              <p className="text-gray-500 text-xs">{rider.vehicle}</p>
-            </div>
-          </div>
-          
-          <div className="flex gap-2">
-            <motion.button 
-              whileTap={{ scale: 0.9 }}
-              className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-[#00CCBC] hover:bg-gray-50"
-            >
-              <Phone size={18} />
-            </motion.button>
-            <motion.button 
-              whileTap={{ scale: 0.9 }}
-              className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center text-[#00CCBC] hover:bg-gray-50"
-            >
-              <MessageSquare size={18} />
-            </motion.button>
-          </div>
-        </div>
-      </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
