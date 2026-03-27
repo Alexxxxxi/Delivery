@@ -14,12 +14,13 @@ async function startServer() {
   // 1. Define paths
   const root = process.cwd();
   const distPath = path.resolve(root, "dist");
+  const builtIndex = path.join(distPath, "index.html");
   
-  // 2. Robust environment detection
-  // If NODE_ENV is production OR the dist/index.html exists, we treat it as production
-  const isProd = process.env.NODE_ENV === "production" || fs.existsSync(path.join(distPath, "index.html"));
+  // 2. ABSOLUTE PRODUCTION CHECK
+  // If dist/index.html exists, we are in production. Period.
+  const isProd = process.env.NODE_ENV === "production" || fs.existsSync(builtIndex);
 
-  console.log(`Detected execution mode: ${isProd ? "PRODUCTION" : "DEVELOPMENT"}`);
+  console.log(`[SERVER] Mode: ${isProd ? "PRODUCTION" : "DEVELOPMENT"}`);
 
   // API routes
   app.get("/api/health", (req, res) => {
@@ -28,7 +29,7 @@ async function startServer() {
 
   if (!isProd) {
     // --- Development Mode ---
-    console.log("Starting in DEVELOPMENT mode with Vite middleware...");
+    console.log("[SERVER] Starting with Vite middleware...");
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
@@ -37,20 +38,18 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     // --- Production Mode ---
-    console.log(`Starting in PRODUCTION mode. Serving from: ${distPath}`);
+    console.log(`[SERVER] Serving from build output: ${distPath}`);
     
-    // Serve static assets from build output
+    // Serve static assets
     app.use(express.static(distPath, { index: false }));
 
-    // Fallback to built index.html for SPA routing
-    // This ensures we serve the processed HTML, not the source one
+    // Fallback to built index.html
     app.get("*", (req, res) => {
-      const indexPath = path.resolve(distPath, "index.html");
-      if (fs.existsSync(indexPath)) {
-        res.sendFile(indexPath);
+      if (fs.existsSync(builtIndex)) {
+        res.sendFile(builtIndex);
       } else {
-        console.error("CRITICAL: Production build missing index.html at", indexPath);
-        res.status(500).send("Production build missing. Please run 'npm run build' first.");
+        console.error("[SERVER] CRITICAL ERROR: Build output missing!");
+        res.status(500).send("Build output missing. Ensure 'npm run build' was executed.");
       }
     });
   }

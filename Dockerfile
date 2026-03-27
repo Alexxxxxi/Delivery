@@ -26,5 +26,5 @@ EXPOSE 3000
 # Set production environment
 ENV NODE_ENV=production
 
-# Start the application
-CMD ["npm", "run", "start"]
+# Start the application using the built server
+CMD ["node", "dist/server.cjs"]
