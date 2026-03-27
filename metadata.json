@@ -1,0 +1,5 @@
+{
+  "name": "Food Delivery Tracker",
+  "description": "A real-time food delivery tracking interface with interactive map and animated progress.",
+  "requestFramePermissions": []
+}
