@@ -162,70 +162,96 @@ const RiderAvatar = () => (
 const PrizeRevealCard = ({ onComplete }: { onComplete: () => void }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9, y: 20 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      className="absolute inset-0 flex items-center justify-center p-6 bg-[#F3F4F6] z-40"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="absolute inset-0 bg-white z-40 overflow-hidden flex flex-col items-center justify-center p-8 text-center"
     >
-      <div className="relative w-full max-w-sm bg-white rounded-[2.5rem] p-8 shadow-2xl overflow-hidden text-center">
-        {/* Simple Confetti Background */}
-        <div className="absolute inset-0 pointer-events-none opacity-20">
-          {[...Array(12)].map((_, i) => (
-            <motion.div
-              key={i}
-              animate={{ 
-                y: [0, 400], 
-                rotate: [0, 360],
-                x: [0, (i % 2 === 0 ? 50 : -50)]
-              }}
-              transition={{ 
-                duration: 2 + Math.random() * 2, 
-                repeat: Infinity, 
-                ease: "linear",
-                delay: Math.random() * 2
-              }}
-              className="absolute w-2 h-2 rounded-sm"
-              style={{ 
-                backgroundColor: ['#00CCBC', '#FF5E00', '#3B82F6', '#F59E0B'][i % 4],
-                left: `${Math.random() * 100}%`,
-                top: `-20px`
-              }}
-            />
-          ))}
-        </div>
+      {/* Full Area Confetti */}
+      <div className="absolute inset-0 pointer-events-none opacity-30">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            animate={{ 
+              y: [0, 600], 
+              rotate: [0, 360],
+              x: [0, (i % 2 === 0 ? 100 : -100)]
+            }}
+            transition={{ 
+              duration: 3 + Math.random() * 3, 
+              repeat: Infinity, 
+              ease: "linear",
+              delay: Math.random() * 2
+            }}
+            className="absolute w-2.5 h-2.5 rounded-sm"
+            style={{ 
+              backgroundColor: ['#00CCBC', '#FF5E00', '#3B82F6', '#F59E0B', '#10B981'][i % 5],
+              left: `${Math.random() * 100}%`,
+              top: `-20px`
+            }}
+          />
+        ))}
+      </div>
 
-        <p className="text-[#FF5E00] font-black text-xs tracking-[0.2em] mb-4">GAME OVER</p>
+      <div className="relative z-10 max-w-xs w-full">
+        <motion.p 
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-[#FF5E00] font-black text-sm tracking-[0.3em] mb-6 uppercase"
+        >
+          Game Over
+        </motion.p>
         
         {/* Prize Icon */}
-        <div className="relative w-32 h-32 mx-auto mb-6">
+        <div className="relative w-40 h-40 mx-auto mb-8">
           <motion.div
-            animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
-            transition={{ duration: 3, repeat: Infinity }}
-            className="w-full h-full bg-[#E0F7F6] rounded-3xl flex items-center justify-center text-6xl shadow-inner border-4 border-[#00CCBC]/20"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
+            transition={{ 
+              type: "spring", 
+              damping: 12, 
+              stiffness: 100,
+              rotate: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+            }}
+            className="w-full h-full bg-[#E0F7F6] rounded-[3rem] flex items-center justify-center text-7xl shadow-xl border-4 border-[#00CCBC]/10"
           >
             🥤
           </motion.div>
           <motion.div
-            animate={{ opacity: [0, 1, 0], scale: [0.8, 1.2, 0.8] }}
+            animate={{ opacity: [0, 1, 0], scale: [0.8, 1.5, 0.8] }}
             transition={{ duration: 2, repeat: Infinity }}
-            className="absolute -top-2 -right-2 w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-xl shadow-lg"
+            className="absolute -top-4 -right-4 w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-2xl shadow-xl"
           >
             ✨
           </motion.div>
         </div>
 
-        <h2 className="text-2xl font-black leading-tight mb-3">
+        <motion.h2 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-3xl font-black leading-tight mb-4"
+        >
           Your Rider Won a<br />
           <span className="text-[#00CCBC]">Free Drink Token!</span>
-        </h2>
+        </motion.h2>
         
-        <p className="text-gray-500 text-sm mb-8 px-4">
+        <motion.p 
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="text-gray-500 text-base mb-10"
+        >
           The prize has been automatically sent to their account.
-        </p>
+        </motion.p>
 
         <motion.button
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.6 }}
           whileTap={{ scale: 0.95 }}
           onClick={onComplete}
-          className="w-full py-4 bg-[#00CCBC] text-white rounded-2xl font-bold shadow-lg shadow-[#00CCBC]/20 hover:bg-[#00B8A9] transition-colors"
+          className="w-full py-5 bg-[#00CCBC] text-white rounded-2xl font-black text-lg shadow-xl shadow-[#00CCBC]/20 hover:bg-[#00B8A9] transition-colors"
         >
           Complete Order
         </motion.button>
